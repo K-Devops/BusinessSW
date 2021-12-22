@@ -23,11 +23,11 @@ if(strlen($name) == 0 || strlen($password) == 0 ) {
     } else {
     $statement = $pdo->prepare("SELECT * FROM USER WHERE PASSWORD = ? AND NAME = ? ");
     $ok = $statement->execute(array($password, $name));
-    $respone = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $response = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    if($respone[0]['NAME'] != $name || $respone[0]['PASSWORD'] != $password){
+    if($response[0]['NAME'] != $name || $response[0]['PASSWORD'] != $password){
        // http_response_code(500);
-        echo json_encode(["ok" => $respone]);
+        echo json_encode(["ok" => $response]);
     }else{
        // http_response_code(200);
         echo json_encode(["ok" => true]);
