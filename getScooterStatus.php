@@ -12,7 +12,7 @@ if($method == "OPTIONS") {
 }
 $pdo = new PDO('mysql:host=127.0.0.1;port=8889;dbname=scooterhub', $user, $pass);
 $statement = $pdo->prepare("SELECT * FROM Scooter");
-// nur Status: $statement = $pdo->prepare("SELECT RESERVATION_STATUS FROM Scooter");
+
 $statement->execute();
 $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($data);
