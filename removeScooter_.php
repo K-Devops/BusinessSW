@@ -18,7 +18,7 @@ $id = trim($data['id'] ?? '');
 if(strlen($id) == 0) {
 echo json_encode(["ok" => false, 'id' => $id]);
 } else {
-$statement = $pdo->prepare("Delete FROM Scooter WHERE ScooterId = (?)");
+$statement = $pdo->prepare("Delete FROM Scooter WHERE Scooter_Id = (?)");
 $ok = $statement->execute([$id]);
 echo json_encode(["ok" => $ok]);
 }
