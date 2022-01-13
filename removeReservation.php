@@ -16,17 +16,24 @@ $pdo = new PDO('mysql:host=127.0.0.1;port=8889;dbname=scooterreservation', $user
 
 // Read JSON Body of request
 $data = json_decode(file_get_contents('php://input'), true);
-$id = trim($data['id'] ?? '');
-if(strlen($id) == 0) {
-echo json_encode(["ok" => false, 'id' => $id]);
+$sid = trim($data['scooterid'] ?? '');
+$rid = trim($data['reservationid'] ?? '');
+if(strlen($sid) == 0) {
+echo json_encode(["ok" => false]);
 } else {
+$statement1 = $pdo->prepare("SELECT STARTDATE FROM reservation where RESERVATION_ID =(?)");
+$ok1 = $statement1->execute([$rid]);
+$response = $statement1->fetchAll(PDO::FETCH_ASSOC);
 
 $statement2 = $pdo->prepare("UPDATE Scooter SET RESERVATION_STATUS = 'Frei' where SCOOTER_ID =(?)");
 $ok2 = $statement2->execute([$sid]);
-$statement3 = $pdo->prepare("UPDATE reservation SET ENDDATE = now() where SCOOTER_ID =(?)");
-$ok3 = $statement3->execute([$sid]);
 
-echo json_encode(["Update3" => $ok3, "Update2" => $ok2]);
+$statement3 = $pdo->prepare("UPDATE reservation SET ENDDATE = now(), STARTDATE = (?) where RESERVATION_ID =(?)");
+$ok3 = $statement3->execute([$response[0]['STARTDATE'],$rid]);
+
+
+
+echo json_encode(["Update3" => $ok3, "Update2" => $ok2, "Update1" => $ok1]);
 }
 
 ?>
